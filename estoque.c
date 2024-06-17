@@ -4,11 +4,12 @@
 
 #define MAX_PRODUTOS 100
 #define MAX_NOME 50
+#define LINHA "---------------------------------------------------------\n"
 
 typedef struct {
     char nome[MAX_NOME];
-    float preco; //preço
-    int quantidade; //quantidade em estoque
+    float preco;
+    int quantidade;
 } Produto;
 
 Produto produtos[MAX_PRODUTOS];
@@ -20,17 +21,21 @@ void registrarProduto() {
         return;
     }
 
-    printf("Nome do produto: ");
+    printf(LINHA);
+    printf("## REGISTRAR PRODUTO ##\n");
+
+    printf("Nome: ");
     scanf("%s", produtos[numProdutos].nome);
 
     printf("Preço: ");
     scanf("%f", &produtos[numProdutos].preco);
 
-    printf("Quantidade em estoque: ");
+    printf("Quantidade: ");
     scanf("%d", &produtos[numProdutos].quantidade);
 
     numProdutos++;
     printf("Produto registrado com sucesso!\n");
+    printf(LINHA);
 }
 
 void listarProdutos() {
@@ -39,24 +44,28 @@ void listarProdutos() {
         return;
     }
 
-    printf("\nProdutos registrados:\n");
+    printf(LINHA);
+    printf("## LISTA DE PRODUTOS ##\n");
+    printf("| %-20s | %-10s | %-10s |\n", "Nome", "Preço", "Quantidade");
+    printf(LINHA);
+
     for (int i = 0; i < numProdutos; i++) {
-        printf("- %s (R$ %.2f) - %d unidades\n",
+        printf("| %-20s | R$ %-8.2f | %-10d |\n",
                produtos[i].nome, produtos[i].preco, produtos[i].quantidade);
     }
+    printf(LINHA);
 }
 
 int main() {
     int opcao;
 
     do {
-        printf("\n#### Menu ####\n");
+        printf("\n#### MENU PRINCIPAL ####\n");
         printf("1 - Registrar Produto\n");
         printf("2 - Listar Produtos\n");
         printf("0 - Sair\n");
-        printf("Escolha uma opção: ");
+        printf("Escolha: ");
 
-        // entrada inválida
         if (scanf("%d", &opcao) != 1) {
             printf("Opção inválida! Digite um número.\n");
             while(getchar() != '\n');
