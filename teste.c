@@ -1,42 +1,70 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-int main()
-{
-    int p1, i;
-    char p2[50];
+#define MAX_PRODUTOS 100
+#define MAX_NOME 50
 
-    printf("\n#### Menu ####\n");
-    printf("1 - Registrar Produto\n");
-    printf("2 - Listar Produtos Registrados\n");
-    printf("0 - Sair\n");
+char produtos[MAX_PRODUTOS][MAX_NOME];
+int numProdutos = 0;
+
+void registrarProdutos() {
+    int quantidade, i;
+
+    printf("Quantos produtos deseja registrar? ");
+    scanf("%d", &quantidade);
+
+    if (quantidade + numProdutos > MAX_PRODUTOS) {
+        printf("Limite de produtos atingido. Não é possível registrar mais.\n");
+        return;
+    }
+
+    for (i = 0; i < quantidade; i++) {
+        printf("Digite o nome do produto %d: ", i + 1);
+        scanf("%s", produtos[numProdutos + i]);
+    }
+
+    numProdutos += quantidade;
+    printf("%d produtos registrados com sucesso!\n", quantidade);
+}
+
+void listarProdutos() {
+    if (numProdutos == 0) {
+        printf("Nenhum produto registrado.\n");
+        return;
+    }
+
+    printf("\nProdutos registrados:\n");
+    for (int i = 0; i < numProdutos; i++) {
+        printf("- %s\n", produtos[i]);
+    }
+}
+
+int main() {
+    int opcao;
 
     do {
-        printf("Digite uma opção:\n");
+        printf("\n#### Menu ####\n");
+        printf("1 - Registrar Produtos\n");
+        printf("2 - Listar Produtos\n");
+        printf("0 - Sair\n");
+        printf("Escolha uma opção: ");
+        scanf("%d", &opcao);
 
-        scanf("%d", &p1);
-
-        switch (p1) {
-            case 0:
-                printf("Escolheu sair do menu\n");
-                break;
+        switch (opcao) {
             case 1:
-                printf("Quantos produtos serão registrados? ");
-                int quantidade;
-                scanf("%d", &quantidade);
-                for(i = 0; i < quantidade; i++) {
-                printf("Qual produto irá ser registrado: ");
-                scanf("%s", p2[i]);
+                registrarProdutos();
                 break;
             case 2:
-
+                listarProdutos();
+                break;
+            case 0:
+                printf("Saindo do programa...\n");
                 break;
             default:
-                printf("Escolheu uma opção inválida\n");
-                break;
+                printf("Opção inválida!\n");
         }
-    } while (p1 != 0);
-}
+    } while (opcao != 0);
 
+    return 0;
 }
-
