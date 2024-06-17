@@ -6,7 +6,7 @@
 #define MAX_NOME 50
 #define MAX_DESC 100
 
-// Estrutura produto
+// Estrutura
 typedef struct {
     int codigo;
     char nome[MAX_NOME];
