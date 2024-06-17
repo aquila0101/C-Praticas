@@ -4,77 +4,88 @@
 
 #define MAX_PRODUTOS 100
 #define MAX_NOME 50
-#define LINHA "---------------------------------------------------------\n"
+#define MAX_DESC 100
 
+// Estrutura para representar um produto
 typedef struct {
+    int codigo;
     char nome[MAX_NOME];
+    char descricao[MAX_DESC];
     float preco;
-    int quantidade;
 } Produto;
 
 Produto produtos[MAX_PRODUTOS];
 int numProdutos = 0;
 
-void registrarProduto() {
-    if (numProdutos == MAX_PRODUTOS) {
+// Funções para interface visual
+void linha() {
+    printf("========================================\n");
+}
+void titulo(const char *texto) {
+    linha();
+    printf("|| %30s ||\n", texto);
+    linha();
+}
+
+// Funções do menu
+void cadastrarProduto() {
+    titulo("CADASTRAR PRODUTO");
+
+    if (numProdutos < MAX_PRODUTOS) {
+        Produto novoProduto;
+        printf("Codigo: ");
+        scanf("%d", &novoProduto.codigo);
+        getchar(); // Limpa o buffer do teclado
+
+        printf("Nome: ");
+        fgets(novoProduto.nome, MAX_NOME, stdin);
+        novoProduto.nome[strcspn(novoProduto.nome, "\n")] = 0; // Remove o \n
+
+        printf("Descricao: ");
+        fgets(novoProduto.descricao, MAX_DESC, stdin);
+        novoProduto.descricao[strcspn(novoProduto.descricao, "\n")] = 0;
+
+        printf("Preco: ");
+        scanf("%f", &novoProduto.preco);
+
+        produtos[numProdutos++] = novoProduto;
+        printf("Produto cadastrado com sucesso!\n");
+    } else {
         printf("Limite de produtos atingido!\n");
-        return;
     }
-
-    printf(LINHA);
-    printf("## REGISTRAR PRODUTO ##\n");
-
-    printf("Nome: ");
-    scanf("%s", produtos[numProdutos].nome);
-
-    printf("Preço: ");
-    scanf("%f", &produtos[numProdutos].preco);
-
-    printf("Quantidade: ");
-    scanf("%d", &produtos[numProdutos].quantidade);
-
-    numProdutos++;
-    printf("Produto registrado com sucesso!\n");
-    printf(LINHA);
 }
 
 void listarProdutos() {
-    if (numProdutos == 0) {
-        printf("Nenhum produto registrado.\n");
-        return;
-    }
+    titulo("LISTAR PRODUTOS");
 
-    printf(LINHA);
-    printf("## LISTA DE PRODUTOS ##\n");
-    printf("| %-20s | %-10s | %-10s |\n", "Nome", "Preço", "Quantidade");
-    printf(LINHA);
-
-    for (int i = 0; i < numProdutos; i++) {
-        printf("| %-20s | R$ %-8.2f | %-10d |\n",
-               produtos[i].nome, produtos[i].preco, produtos[i].quantidade);
+    if (numProdutos > 0) {
+        for (int i = 0; i < numProdutos; i++) {
+            printf("Codigo: %d\n", produtos[i].codigo);
+            printf("Nome: %s\n", produtos[i].nome);
+            printf("Descricao: %s\n", produtos[i].descricao);
+            printf("Preco: %.2f\n", produtos[i].preco);
+            printf("--------------------\n");
+        }
+    } else {
+        printf("Nenhum produto cadastrado!\n");
     }
-    printf(LINHA);
 }
 
 int main() {
     int opcao;
 
     do {
-        printf("\n#### MENU PRINCIPAL ####\n");
-        printf("1 - Registrar Produto\n");
-        printf("2 - Listar Produtos\n");
-        printf("0 - Sair\n");
-        printf("Escolha: ");
-
-        if (scanf("%d", &opcao) != 1) {
-            printf("Opção inválida! Digite um número.\n");
-            while(getchar() != '\n');
-            continue;
-        }
+        titulo("MENU PRINCIPAL");
+        printf("|| 1 - Cadastrar Produto          ||\n");
+        printf("|| 2 - Listar Produtos            ||\n");
+        printf("|| 0 - Sair                       ||\n");
+        linha();
+        printf("Opcao: ");
+        scanf("%d", &opcao);
 
         switch (opcao) {
             case 1:
-                registrarProduto();
+                cadastrarProduto();
                 break;
             case 2:
                 listarProdutos();
@@ -83,8 +94,9 @@ int main() {
                 printf("Saindo do programa...\n");
                 break;
             default:
-                printf("Opção inválida!\n");
+                printf("Opcao invalida!\n");
         }
+        printf("\n"); // Adiciona um espaço após cada operação
     } while (opcao != 0);
 
     return 0;
