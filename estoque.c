@@ -6,7 +6,7 @@
 #define MAX_NOME 50
 #define MAX_DESC 100
 
-// Estrutura para representar um produto
+// Estrutura produto
 typedef struct {
     int codigo;
     char nome[MAX_NOME];
@@ -17,7 +17,7 @@ typedef struct {
 Produto produtos[MAX_PRODUTOS];
 int numProdutos = 0;
 
-// Funções para interface visual
+// Linha do Menu
 void linha() {
     printf("========================================\n");
 }
@@ -35,11 +35,11 @@ void cadastrarProduto() {
         Produto novoProduto;
         printf("Codigo: ");
         scanf("%d", &novoProduto.codigo);
-        getchar(); // Limpa o buffer do teclado
+        getchar();
 
         printf("Nome: ");
         fgets(novoProduto.nome, MAX_NOME, stdin);
-        novoProduto.nome[strcspn(novoProduto.nome, "\n")] = 0; // Remove o \n
+        novoProduto.nome[strcspn(novoProduto.nome, "\n")] = 0; 
 
         printf("Descricao: ");
         fgets(novoProduto.descricao, MAX_DESC, stdin);
@@ -96,7 +96,7 @@ int main() {
             default:
                 printf("Opcao invalida!\n");
         }
-        printf("\n"); // Adiciona um espaço após cada operação
+        printf("\n"); // Adiciona espaço para  cada escolha
     } while (opcao != 0);
 
     return 0;
