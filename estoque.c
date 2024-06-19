@@ -105,7 +105,7 @@ int main() {
             default:
                 printf("Opcao invalida!\n");
         }
-       system("cls");
+       system("\n");
     } while (opcao != 0 || opcao !=1 || opcao !=2);
 
     return 0;
