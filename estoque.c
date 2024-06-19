@@ -76,6 +76,36 @@ void listarProdutos() {
         printf("Nenhum produto cadastrado!\n");
     }
 }
+int menuu() {
+    int opcao;
+    do {
+        titulo("MENU PRINCIPAL");
+        printf("|| 1 - Cadastrar Produto          ||\n");
+        printf("|| 2 - Listar Produtos            ||\n");
+        printf("|| 0 - Voltar                       ||\n");
+        printf("Opcao: ");
+        scanf("%d", &opcao);
+
+        switch (opcao) {
+            case 1:
+                cadastrarProduto();
+                break;
+            case 2:
+                system("cls"); // Limpa a tela (Windows)
+                listarProdutos();
+                break;
+            case 0:
+                system("cls"); // Limpa a tela (Windows)
+                printf("Saindo do programa...\n");
+                break;
+            default:
+                printf("Opcao invalida!\n");
+        }
+        printf("\n");
+    } while (opcao != 0 && opcao != 1 && opcao != 2);
+
+    return 0;
+}
 
 int main() {
     int opcao;
@@ -97,12 +127,14 @@ int main() {
             case 2:
                 system("cls");
                 listarProdutos();
+                menuu();
                 break;
             case 0:
                 system("cls");
                 printf("Saindo do programa...\n");
                 break;
             default:
+                system("cls");
                 printf("Opcao invalida!\n");
         }
        system("\n");
