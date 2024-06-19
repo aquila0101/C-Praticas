@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -29,6 +30,7 @@ void titulo(const char *texto) {
 
 // Funções do menu
 void cadastrarProduto() {
+    system("cls");
     titulo("CADASTRAR PRODUTO");
 
     if (numProdutos < MAX_PRODUTOS) {
@@ -39,7 +41,7 @@ void cadastrarProduto() {
 
         printf("Nome: ");
         fgets(novoProduto.nome, MAX_NOME, stdin);
-        novoProduto.nome[strcspn(novoProduto.nome, "\n")] = 0; 
+        novoProduto.nome[strcspn(novoProduto.nome, "\n")] = 0;
 
         printf("Descricao: ");
         fgets(novoProduto.descricao, MAX_DESC, stdin);
@@ -49,7 +51,9 @@ void cadastrarProduto() {
         scanf("%f", &novoProduto.preco);
 
         produtos[numProdutos++] = novoProduto;
+        system("cls");
         printf("Produto cadastrado com sucesso!\n");
+
     } else {
         printf("Limite de produtos atingido!\n");
     }
@@ -65,6 +69,8 @@ void listarProdutos() {
             printf("Descricao: %s\n", produtos[i].descricao);
             printf("Preco: %.2f\n", produtos[i].preco);
             printf("--------------------\n");
+           // getchar();
+
         }
     } else {
         printf("Nenhum produto cadastrado!\n");
@@ -75,6 +81,7 @@ int main() {
     int opcao;
 
     do {
+
         titulo("MENU PRINCIPAL");
         printf("|| 1 - Cadastrar Produto          ||\n");
         printf("|| 2 - Listar Produtos            ||\n");
@@ -88,6 +95,7 @@ int main() {
                 cadastrarProduto();
                 break;
             case 2:
+                system("cls");
                 listarProdutos();
                 break;
             case 0:
