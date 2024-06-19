@@ -99,13 +99,14 @@ int main() {
                 listarProdutos();
                 break;
             case 0:
+                system("cls");
                 printf("Saindo do programa...\n");
                 break;
             default:
                 printf("Opcao invalida!\n");
         }
-        printf("\n"); // Adiciona espaço para  cada escolha
-    } while (opcao != 0);
+       system("cls");
+    } while (opcao != 0 || opcao !=1 || opcao !=2);
 
     return 0;
 }
