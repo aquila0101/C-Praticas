@@ -2,12 +2,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <locale.h>
 
 #define MAX_PRODUTOS 100
 #define MAX_NOME 50
 #define MAX_DESC 100
 
 // Estrutura
+
 typedef struct {
     int codigo;
     char nome[MAX_NOME];
@@ -35,7 +37,7 @@ void cadastrarProduto() {
 
     if (numProdutos < MAX_PRODUTOS) {
         Produto novoProduto;
-        printf("Codigo: ");
+        printf("Código: ");
         scanf("%d", &novoProduto.codigo);
         getchar();
 
@@ -47,7 +49,7 @@ void cadastrarProduto() {
         fgets(novoProduto.descricao, MAX_DESC, stdin);
         novoProduto.descricao[strcspn(novoProduto.descricao, "\n")] = 0;
 
-        printf("Preco: ");
+        printf("Preço: ");
         scanf("%f", &novoProduto.preco);
 
         produtos[numProdutos++] = novoProduto;
@@ -64,16 +66,16 @@ void listarProdutos() {
 
     if (numProdutos > 0) {
         for (int i = 0; i < numProdutos; i++) {
-            printf("Codigo: %d\n", produtos[i].codigo);
+            printf("Código: %d\n", produtos[i].codigo);
             printf("Nome: %s\n", produtos[i].nome);
             printf("Descricao: %s\n", produtos[i].descricao);
-            printf("Preco: %.2f\n", produtos[i].preco);
+            printf("Preço: %.2f\n", produtos[i].preco);
             printf("--------------------\n");
            // getchar();
 
         }
     } else {
-        printf("Nenhum produto cadastrado!\n");
+        printf("Nenhum Produto Cadastrado!\n");
     }
 }
 int menuu() {
@@ -82,8 +84,8 @@ int menuu() {
         titulo("MENU PRINCIPAL");
         printf("|| 1 - Cadastrar Produto          ||\n");
         printf("|| 2 - Listar Produtos            ||\n");
-        printf("|| 0 - Voltar                       ||\n");
-        printf("Opcao: ");
+        printf("|| 0 - Voltar                     ||\n");
+        printf("Opção: ");
         scanf("%d", &opcao);
 
         switch (opcao) {
@@ -99,7 +101,7 @@ int menuu() {
                 printf("Saindo do programa...\n");
                 break;
             default:
-                printf("Opcao invalida!\n");
+                printf("Opção invalida!\n");
         }
         printf("\n");
     } while (opcao != 0 && opcao != 1 && opcao != 2);
@@ -111,7 +113,7 @@ int main() {
     int opcao;
 
     do {
-
+        setlocale(LC_ALL, "Portuguese");
         titulo("MENU PRINCIPAL");
         printf("|| 1 - Cadastrar Produto          ||\n");
         printf("|| 2 - Listar Produtos            ||\n");
@@ -135,7 +137,7 @@ int main() {
                 break;
             default:
                 system("cls");
-                printf("Opcao invalida!\n");
+                printf("Opção invalida!\n");
         }
        system("\n");
     } while (opcao != 0 || opcao !=1 || opcao !=2);
