@@ -61,6 +61,35 @@ void registrar_produto() {
     printf("Produto registrado com sucesso! (ID: %d)\n", novoProduto.id);
 }
 
+void imprimir_cabecalho(int tabSize) {
+    wprintf(L"┌────────────┬────────────────");
+    for (int i = 0; i < tabSize; i++) {
+        wprintf(L"─");
+    }
+    wprintf(L"────┬────────────┐\n");
+    wprintf(L"| ID\t| Nome");
+    for (int i = 0; i < tabSize; i++) {
+        wprintf(L" ");
+    }
+    wprintf(L" | Preço\t|\n");
+    wprintf(L"├────────────┼────────────────");
+    for (int i = 0; i < tabSize; i++) {
+        wprintf(L"─");
+    }
+    wprintf(L"────┼────────────┤\n");
+}
+// Função para imprimir o corpo da tabela
+void imprimir_produto(Produto p, int tabSize) {
+    wprintf(L"| %d\t| %-15ls | R$ %.2f |\n", p.id, p.nome, p.preco);
+}
+// Função para imprimir o rodapé da tabela
+void imprimir_rodape(int tabSize) {
+    wprintf(L"└────────────┴────────────────");
+    for (int i = 0; i < tabSize; i++) {
+        wprintf(L"─");
+    }
+    wprintf(L"────┴────────────┘\n");
+}
 // Função para listar os produtos
 void listar_produtos() {
     system("cls");
@@ -83,32 +112,16 @@ void listar_produtos() {
         // Calcular o número de espaços para a tabulação
         int tabSize = (maxNomeLength > 15) ? 1 : (15 - maxNomeLength);
 
-        // Imprimir o cabeçalho com a tabulação ajustada
-        wprintf(L"┌────────────┬────────────────");
-        for (int i = 0; i < tabSize; i++) {
-            wprintf(L"─");
-        }
-        wprintf(L"────┬────────────┐\n");
-        wprintf(L"| ID\t| Nome");
-        for (int i = 0; i < tabSize; i++) {
-            wprintf(L" ");
-        }
-        wprintf(L" | Preço\t|\n");
-        wprintf(L"├────────────┼────────────────");
-        for (int i = 0; i < tabSize; i++) {
-            wprintf(L"─");
-        }
-        wprintf(L"────┼────────────┤\n");
+        // Imprimir o cabeçalho
+        imprimir_cabecalho(tabSize);
 
+        // Imprimir cada produto
         for (int i = 0; i < numProdutos; i++) {
-            wprintf(L"| %d\t| %-15ls | R$ %.2f |\n", produtos[i].id, produtos[i].nome, produtos[i].preco);
+            imprimir_produto(produtos[i], tabSize);
         }
 
-        wprintf(L"└────────────┴────────────────");
-        for (int i = 0; i < tabSize; i++) {
-            wprintf(L"─");
-        }
-        wprintf(L"────┴────────────┘\n");
+        // Imprimir o rodapé
+        imprimir_rodape(tabSize);
     }
 }
 
