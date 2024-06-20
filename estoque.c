@@ -1,148 +1,154 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <string.h>
 #include <locale.h>
-#include <ctype.h>
-#include <windows.h>
+#include <wchar.h>
 
 #define MAX_PRODUTOS 100
-#define MAX_NOME 50
-#define MAX_DESC 100
-#define NOME_ARQUIVO "produtos.txt"
+#define MAX_NOME_PRODUTO 50
 
+// Estrutura para representar um produto
 typedef struct {
-    int codigo;
-    char nome[MAX_NOME];
-    char descricao[MAX_DESC];
+    int id;
+    wchar_t nome[MAX_NOME_PRODUTO];
     float preco;
 } Produto;
 
 Produto produtos[MAX_PRODUTOS];
 int numProdutos = 0;
 
-void linha() {
-    printf("========================================\n");
+// Função para gerar um ID aleatório
+int gerar_id() {
+    srand(time(NULL));
+    return rand() % 1000;
 }
 
-void titulo(const char *texto) {
-    linha();
-    printf(texto);
-    linha();
-}
+// Função para registrar um produto
+void registrar_produto() {
+    system("cls");
+    setlocale(LC_ALL, "Portuguese");
 
-void cadastrarProduto() {
-    system("cls || clear");
-    titulo("CADASTRAR PRODUTO\n");
-
-    if (numProdutos < MAX_PRODUTOS) {
-        Produto novoProduto;
-        int codigoDuplicado;
-
-        do {
-            codigoDuplicado = 0;
-            printf("Código: ");
-            scanf("%d", &novoProduto.codigo);
-            getchar();
-
-            for (int i = 0; i < numProdutos; i++) {
-                if (produtos[i].codigo == novoProduto.codigo) {
-                    codigoDuplicado = 1;
-                    printf("Código já cadastrado! Digite outro código.");
-                    break;
-                }
-            }
-        } while (codigoDuplicado);
-
-        printf("Nome: ");
-        fgets(novoProduto.nome, MAX_NOME, stdin);
-        novoProduto.nome[strcspn(novoProduto.nome, "\n")] = 0;
-
-        printf("Descrição: ");
-        fgets(novoProduto.descricao, MAX_DESC, stdin);
-        novoProduto.descricao[strcspn(novoProduto.descricao, "\n")] = 0;
-
-        printf("Preço: ");
-        scanf("%f", &novoProduto.preco);
-
-        produtos[numProdutos++] = novoProduto;
-        printf("\nProduto cadastrado com sucesso!\n");
-
-        // Salvar produto no arquivo
-        FILE *arquivo = fopen(NOME_ARQUIVO, "a");
-        if (arquivo == NULL) {
-            printf("Erro ao abrir o arquivo para escrita!");
-            return;
-        }
-
-        fprintf(arquivo, "%d;%s;%s;%.2f\n", novoProduto.codigo, novoProduto.nome, novoProduto.descricao, novoProduto.preco);
-        fclose(arquivo);
-    } else {
-        printf("\nLimite de produtos atingido!\n");
-    }
-    system("pause");
-}
-
-void listarProdutos() {
-    system("cls || clear");
-    titulo("LISTAR PRODUTOS\n");
-
-    FILE *arquivo = fopen(NOME_ARQUIVO, "r");
-    if (arquivo == NULL) {
-        printf("\nNenhum produto cadastrado!\n");
-        system("pause");
+    if (numProdutos >= MAX_PRODUTOS) {
+        printf("Limite máximo de produtos atingido!\n");
         return;
     }
 
-    Produto produto;
-    while (fscanf(arquivo, "%d;%49[^;];%99[^;];%f\n", &produto.codigo, produto.nome, produto.descricao, &produto.preco) == 4) {
-        printf("Código:");
-        printf("%d\n", produto.codigo);
-        printf("Nome:");
-        printf("%s\n", produto.nome);
-        printf("Descrição:");
-        printf("%s\n", produto.descricao);
-        printf("Preço:");
-        printf("%.2f\n", produto.preco);
-        printf("--------------------\n");
-    }
+    Produto novoProduto;
+    novoProduto.id = gerar_id();
 
-    fclose(arquivo);
-    system("pause");
+    printf("\n========== Registrar Produto ==========\n");
+    printf("Nome do produto: ");
+
+    int ch;
+    while ((ch = getchar()) != EOF && ch != '\n'); // Limpa o buffer
+    fgetws(novoProduto.nome, MAX_NOME_PRODUTO, stdin);
+    novoProduto.nome[wcslen(novoProduto.nome) - 1] = L'\0'; // Remove a nova linha
+
+    do {
+        printf("Preço (maior que zero): ");
+        if (scanf("%f", &novoProduto.preco) != 1) {
+            printf("Entrada inválida. Digite um número válido.\n");
+            while ((ch = getchar()) != EOF && ch != '\n');
+        } else if (novoProduto.preco <= 0) {
+            printf("O preço deve ser maior que zero. Tente novamente.\n");
+        }
+    } while (novoProduto.preco <= 0);
+
+    produtos[numProdutos] = novoProduto;
+    numProdutos++;
+
+    printf("Produto registrado com sucesso! (ID: %d)\n", novoProduto.id);
 }
+
+// Função para listar os produtos
+void listar_produtos() {
+    system("cls");
+    setlocale(LC_ALL, "Portuguese");
+
+    wprintf(L"\n\t========== Lista de Produtos ==========\n\n");
+
+    if (numProdutos == 0) {
+        wprintf(L"\t   Nenhum produto cadastrado ainda.\n\n");
+    } else {
+        // Encontrar o nome mais longo para ajustar a tabulação
+        int maxNomeLength = 0;
+        for (int i = 0; i < numProdutos; i++) {
+            int nomeLength = wcslen(produtos[i].nome);
+            if (nomeLength > maxNomeLength) {
+                maxNomeLength = nomeLength;
+            }
+        }
+
+        // Calcular o número de espaços para a tabulação
+        int tabSize = (maxNomeLength > 15) ? 1 : (15 - maxNomeLength);
+
+        // Imprimir o cabeçalho com a tabulação ajustada
+        wprintf(L"┌────────────┬────────────────");
+        for (int i = 0; i < tabSize; i++) {
+            wprintf(L"─");
+        }
+        wprintf(L"────┬────────────┐\n");
+        wprintf(L"| ID\t| Nome");
+        for (int i = 0; i < tabSize; i++) {
+            wprintf(L" ");
+        }
+        wprintf(L" | Preço\t|\n");
+        wprintf(L"├────────────┼────────────────");
+        for (int i = 0; i < tabSize; i++) {
+            wprintf(L"─");
+        }
+        wprintf(L"────┼────────────┤\n");
+
+        for (int i = 0; i < numProdutos; i++) {
+            wprintf(L"| %d\t| %-15ls | R$ %.2f |\n", produtos[i].id, produtos[i].nome, produtos[i].preco);
+        }
+
+        wprintf(L"└────────────┴────────────────");
+        for (int i = 0; i < tabSize; i++) {
+            wprintf(L"─");
+        }
+        wprintf(L"────┴────────────┘\n");
+    }
+}
+
 
 int main() {
     int opcao;
+    int ch;
+    setlocale(LC_ALL, "Portuguese");
 
     do {
-        setlocale(LC_ALL, "Portuguese");
-        system("cls || clear");
-        titulo("      MENU PRINCIPAL                   \n");
-        printf("||   1 - Cadastrar Produto           ||\n");
-        printf("||   2 - Listar Produtos             ||\n");
-        printf("||   3 - Sair                        ||\n");
+        printf("\n\t========== Menu ==========\n\n");
+        printf("\t1 - Registrar produto\n");
+        printf("\t2 - Listar produtos\n");
+        printf("\t3 - Sair\n\n");
+        printf("\tOpção: ");
 
-        linha();
-        printf("Opção: ");
-        scanf("%d", &opcao);
+        if (scanf("%d", &opcao) != 1) {
+            printf("Entrada inválida. Digite um número válido.\n");
+            while ((ch = getchar()) != EOF && ch != '\n');
+            continue;
+        }
 
         switch (opcao) {
             case 1:
-                cadastrarProduto();
+                system("cls");
+                registrar_produto();
                 break;
             case 2:
-                listarProdutos();
+                system("cls");
+                listar_produtos();
                 break;
             case 3:
                 system("cls");
-                linha();
-                printf("|| Saindo do Programa!              ||\n");
-                linha();
+                printf("Encerrando o programa...\n");
                 exit(0);
             default:
-                printf("\nOpção inválida!\n\n");
+                printf("Opção inválida!\n");
                 system("pause");
         }
-    } while (opcao != 1 || opcao !=2 || opcao !=3);
+    } while (opcao != 3);
 
-    printf("\nOpção inválida!\n\n");
+    return 0;
 }
