@@ -33,6 +33,8 @@ int produtoExiste(const char *nome) {
 
 void registrarProduto() {
     system("cls");
+    fflush(stdin);
+
     if (numProdutos >= MAX_PRODUTOS) {
         printf("\nLimite de produtos atingido!\n");
         return;
@@ -41,16 +43,25 @@ void registrarProduto() {
     struct Produto novoProduto;
     printf("\n" LINHA "--- Registrar Produto ---\n" LINHA);
 
+    // Leitura do nome com espaços
     do {
         printf("Nome: ");
-        scanf("%s", novoProduto.nome);
-        if (produtoExiste(novoProduto.nome)) {
-            printf("Produto com este nome já existe. Insira outro nome.\n");
+        if (fgets(novoProduto.nome, sizeof(novoProduto.nome), stdin) == NULL) {
+            printf("Erro ao ler o nome do produto.\n");
+            return;
         }
+
+        // Remover o \n (nova linha) do final da string
+        novoProduto.nome[strcspn(novoProduto.nome, "\n")] = 0; ;
     } while (produtoExiste(novoProduto.nome));
 
     printf("Valor: R$ ");
     scanf("%f", &novoProduto.valor);
+
+    // Limpeza do buffer de entrada após scanf
+   int c;
+    while ((c = getchar()) != '\n' && c != EOF) { }
+
     printf("Quantidade: ");
     scanf("%d", &novoProduto.quantidade);
 
@@ -59,6 +70,7 @@ void registrarProduto() {
 
     printf(LINHA "Produto registrado com sucesso! (ID: %d)\n" LINHA, novoProduto.id);
 }
+
 
 void listarProdutos() {
     system("cls");
