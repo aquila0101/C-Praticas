@@ -91,10 +91,12 @@ void listarProdutos() {
     }
 
     for (int i = 0; i < numProdutos; i++) {
-        printf("ID: %d \t| Nome: %s \t| Valor: R$ %.2f \t| Quantidade: %d\n",
+
+        printf("ID: %d \n\t| Nome: %s \n\t| Valor: R$ %.2f \n\t| Quantidade: %d\n",
                produtos[i].id, produtos[i].nome, produtos[i].valor, produtos[i].quantidade);
+        printf(LINHA);
     }
-    printf(LINHA);
+
 }
 
 void buscarProdutoPorID() {
