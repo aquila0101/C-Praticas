@@ -79,7 +79,7 @@ void listarProdutos() {
     }
 
     for (int i = 0; i < numProdutos; i++) {
-        printf("ID: %d | Nome: %s | Valor: R$ %.2f | Quantidade: %d\n",
+        printf("ID: %d \t| Nome: %s \t| Valor: R$ %.2f \t| Quantidade: %d\n",
                produtos[i].id, produtos[i].nome, produtos[i].valor, produtos[i].quantidade);
     }
     printf(LINHA);
@@ -111,8 +111,8 @@ void mostrarMenu() {
     printf("|          MENU               |\n");
     printf("|_____________________________|\n");
     printf("|                             |\n");
-    printf("| 1. Registrar produto        |\n");
-    printf("| 2. Listar produtos          |\n");
+    printf("| 1. Registrar Produto        |\n");
+    printf("| 2. Listar Produtos          |\n");
     printf("| 3. Buscar Produto por ID    |\n");
     printf("| 4. Sair                     |\n");
     printf("|_____________________________|\n");
