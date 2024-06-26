@@ -135,7 +135,7 @@ void mostrarMenu() {
 
 int main() {
     srand(time(NULL)); //Gerador de números aleatórios
-    setlocale(LC_ALL, "pt_BR.UTF-8");
+    setlocale(LC_ALL, "");
 
     int escolha;
     do {
