@@ -158,6 +158,7 @@ int main() {
                 printf("\nSaindo do programa...\n");
                 break;
             default:
+                system("cls");
                 printf("\nOpção inválida!\n");
         }
     } while (escolha != 4);
